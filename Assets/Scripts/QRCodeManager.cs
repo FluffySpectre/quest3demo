@@ -44,6 +44,9 @@ public class QRCodeManager : MonoBehaviour
 
         sceneAnchor.gameObject.SetActive(true);
         sceneAnchor.Initialize(trackable);
+
+        // Disable QR code tracking
+        mrukInstance.enabled = false;
     }
 
     public void OnTrackableRemoved(MRUKTrackable trackable)
