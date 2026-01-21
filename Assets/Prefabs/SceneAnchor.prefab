@@ -2993,10 +2993,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6963413499288047578}
     m_Modifications:
-    - target: {fileID: 1762531200708422993, guid: 7943d17e9ad9e4268839032ac944e8ce, type: 3}
-      propertyPath: m_text
-      value: Display 2
-      objectReference: {fileID: 0}
     - target: {fileID: 2425244273857202303, guid: 7943d17e9ad9e4268839032ac944e8ce, type: 3}
       propertyPath: m_Name
       value: DisplayPanelRight
