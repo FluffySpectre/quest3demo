@@ -19,6 +19,8 @@ public class QRCodeManager : MonoBehaviour
     {
         //s_instance = this;
 
+        sceneAnchor.gameObject.SetActive(false);
+
         if (!mrukInstance)
         {
             Debug.LogError($"{nameof(QRCodeManager)} requires an MRUK object in the scene!");
