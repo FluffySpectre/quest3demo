@@ -4241,7 +4241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2169669742819329091, guid: 5f24ca91b38a6704f8f00ddbe45c0a48, type: 3}
       propertyPath: m_text
-      value: Reset Position Offset
+      value: Reset Rotation Offset
       objectReference: {fileID: 0}
     - target: {fileID: 2169669742819329091, guid: 5f24ca91b38a6704f8f00ddbe45c0a48, type: 3}
       propertyPath: m_fontSize
