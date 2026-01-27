@@ -122,7 +122,7 @@ Transform:
   m_GameObject: {fileID: 77079401534651003}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -24, z: 0}
+  m_LocalPosition: {x: 0, y: -13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8757,7 +8757,7 @@ Transform:
   m_GameObject: {fileID: 2995197186711617665}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -24, z: 0}
+  m_LocalPosition: {x: 0, y: -13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13320,8 +13320,6 @@ GameObject:
   - component: {fileID: 1213469262724221467}
   - component: {fileID: 3412875126980026305}
   - component: {fileID: 3371213847769430642}
-  - component: {fileID: 6486993088095974990}
-  - component: {fileID: 9031810731789495024}
   - component: {fileID: 7160282357467453821}
   m_Layer: 0
   m_Name: MenuPanel
@@ -13419,41 +13417,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6486993088095974990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4330465479170303966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c4c1b38c49ffa449b585d54fcdc4a8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &9031810731789495024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4330465479170303966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90c062ec4d5169b45b6ca0b170fe142b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sceneLoader: {fileID: 6486993088095974990}
-  _sceneGroupContainer: {fileID: 6750203665496694011}
-  _missingSceneWarning: {fileID: 8936968112855914666}
-  _groupTemplateParent: {fileID: 835284988577424692}
-  _groupTemplateLabel: {fileID: 5966444176170666434}
-  _groupTileContainer: {fileID: 8049272421637289128}
-  _tileTemplateParent: {fileID: 3691923191290544240}
-  _tileTemplateLabel: {fileID: 4697519331824181092}
-  _tileTemplateImage: {fileID: 7793853935046841587}
-  _tileTemplateToggle: {fileID: 1489179333910038419}
-  _tileTemplateSceneMissingOverlay: {fileID: 2123635729520339513}
 --- !u!114 &7160282357467453821
 MonoBehaviour:
   m_ObjectHideFlags: 0
