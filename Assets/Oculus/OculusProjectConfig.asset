@@ -43,7 +43,7 @@ MonoBehaviour:
   insightPassthroughEnabled: 0
   _insightPassthroughSupport: 2
   isPassthroughCameraAccessEnabled: 1
-  _processorFavor: 0
+  _processorFavor: 1
   systemSplashScreen: {fileID: 0}
   systemSplashScreenType: 0
   _systemLoadingScreenBackground: 1
