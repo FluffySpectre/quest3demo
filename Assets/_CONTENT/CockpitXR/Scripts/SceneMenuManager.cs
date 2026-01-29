@@ -7,6 +7,7 @@ public class SceneMenuManager : MonoBehaviour
     public UnityEvent onMenuShown;
     public UnityEvent onMenuHidden;
     public Transform sceneAnchorPivot;
+    public GameObject occlusionMeshes;
     public float positionOffsetStep = 0.001f;
     public float rotationOffsetStep = 0.5f;
 
@@ -281,5 +282,13 @@ public class SceneMenuManager : MonoBehaviour
         sceneAnchorPivot.localEulerAngles = rot;
         UpdateValueLabels();
         SaveOffsets();
+    }
+
+    public void ToggleOcclusionMeshes(bool value)
+    {
+        if (occlusionMeshes != null)
+        {
+            occlusionMeshes.SetActive(value);
+        }
     }
 }
