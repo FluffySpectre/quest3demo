@@ -3,23 +3,21 @@ Shader "Custom/CleanableSurfaceUnlit"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _RevealTex ("Reveal Texture", 2D) = "white" {}
         _Brightness ("Brightness", Range(0.5, 2)) = 1.0
     }
     
     SubShader
     {
         Tags 
-        {
-            "RenderType" = "Transparent"
-            "Queue" = "Transparent-1" // Render before standard transparent objects (like particles)
+        { 
+            "RenderType" = "Opaque"
+            "Queue" = "Geometry"
             "RenderPipeline" = "UniversalPipeline"
         }
         
         Pass
         {
-            Blend SrcAlpha OneMinusSrcAlpha
-            ZWrite Off
-            
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -44,9 +42,12 @@ Shader "Custom/CleanableSurfaceUnlit"
             
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
+            TEXTURE2D(_RevealTex);
+            SAMPLER(sampler_RevealTex);
             
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
+                float4 _RevealTex_ST;
                 float _Brightness;
             CBUFFER_END
             
@@ -65,10 +66,16 @@ Shader "Custom/CleanableSurfaceUnlit"
             half4 frag(Varyings IN) : SV_Target
             {
                 half4 texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
-                half4 finalColor = texColor * IN.color * _Brightness;
+                half4 revealColor = SAMPLE_TEXTURE2D(_RevealTex, sampler_RevealTex, IN.uv);
+                
+                half4 dirtyWetColor = texColor * IN.color * _Brightness;
+                
+                // Blend between dirty/wet color and reveal color based on vertex alpha
+                half4 finalColor;
+                finalColor.rgb = lerp(dirtyWetColor.rgb, revealColor.rgb * _Brightness, IN.color.a);
+                finalColor.a = 1.0;
                 
                 finalColor.rgb = MixFog(finalColor.rgb, IN.fogFactor);
-                finalColor.a = IN.color.a;
                 
                 return finalColor;
             }

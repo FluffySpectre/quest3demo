@@ -6920,6 +6920,10 @@ MonoBehaviour:
   sprayRadius: 0.06
   sprayAmount: 2
   sprayRate: 20
+  surfaceLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  isSpraying: 0
 --- !u!1 &6109578442698925256
 GameObject:
   m_ObjectHideFlags: 0

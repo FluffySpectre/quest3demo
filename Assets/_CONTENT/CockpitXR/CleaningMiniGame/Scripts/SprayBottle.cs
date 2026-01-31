@@ -7,6 +7,7 @@ public class SprayBottle : MonoBehaviour
     [SerializeField] private float sprayRadius = 0.03f;
     [SerializeField] private float sprayAmount = 0.3f;
     [SerializeField] private float sprayRate = 10f; // sprays per second
+    [SerializeField] private LayerMask surfaceLayer;
     
     private float lastSprayTime;
     public bool isSpraying;
@@ -33,7 +34,7 @@ public class SprayBottle : MonoBehaviour
     public void PerformSpray()
     {
         // Raycast from spray origin
-        if (Physics.Raycast(sprayOrigin.position, sprayOrigin.forward, out RaycastHit hit, sprayRange))
+        if (Physics.Raycast(sprayOrigin.position, sprayOrigin.forward, out RaycastHit hit, sprayRange, surfaceLayer))
         {
             var cleanableSurface = hit.collider.GetComponentInParent<CleanableSurface>();
             

@@ -16,9 +16,6 @@ public class CleaningCell
     public float WetAmount;      // 0-1, gradual wetting
     public float CleanAmount;    // 0-1, gradual cleaning
     public float WetTimer;       // Time remaining before drying out
-    
-    public bool CanBeWet => State == CellState.Dirty;
-    public bool CanBeCleaned => State == CellState.Wet && WetAmount >= 0.5f;
 }
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
@@ -30,8 +27,9 @@ public class CleanableSurface : MonoBehaviour
     [SerializeField] private Vector2 surfaceSize = new Vector2(0.4f, 0.4f);
     
     [Header("State Colors")]
-    [SerializeField] private Color dirtyColor = new Color(0.35f, 0.25f, 0.15f, 1f);
-    [SerializeField] private Color wetColor = new Color(0.25f, 0.3f, 0.4f, 1f);
+    [SerializeField] private Color dirtyColor = new Color(0.35f, 0.25f, 0.15f, 0f);
+    [SerializeField] private Color wetColor = new Color(0.25f, 0.3f, 0.4f, 0f);
+    [SerializeField] private Color cleanColor = new Color(1f, 1f, 1f, 1f);
     
     [Header("Wet State Transition")]
     [SerializeField] private float wetThreshold = 0.3f;        // WetAmount needed to transition to Wet state
@@ -39,6 +37,7 @@ public class CleanableSurface : MonoBehaviour
     
     [Header("Clean State Transition")]
     [SerializeField] private float cleanThreshold = 1.0f;      // CleanAmount needed to transition to Clean state
+    [SerializeField] [Range(0f, 0.5f)] private float cleanMissProbability = 0.2f;
     
     [Header("Dry Out Settings")]
     [SerializeField] private bool enableDryOut = true;
@@ -54,12 +53,11 @@ public class CleanableSurface : MonoBehaviour
     [SerializeField] private AudioClip cleanSound;
     [SerializeField] private AudioClip completionSound;
     [SerializeField] [Range(0f, 1f)] private float audioVolume = 0.5f;
-    
+
     public event Action<float> OnProgressChanged;
     public event Action OnFullyCleaned;
     public event Action<Vector2Int, CellState> OnCellStateChanged;
     
-    private Color cleanColor = new Color(0f, 0f, 0f, 0f);
     private CleaningCell[,] cells;
     private Mesh mesh;
     private MeshFilter meshFilter;
@@ -330,6 +328,10 @@ public class CleanableSurface : MonoBehaviour
         
         foreach (var pos in affectedCells)
         {
+            // Random chance to miss this cell
+            if (UnityEngine.Random.value < cleanMissProbability)
+                continue;
+
             var cell = cells[pos.x, pos.y];
             
             // Can only clean wet cells with sufficient wetness
