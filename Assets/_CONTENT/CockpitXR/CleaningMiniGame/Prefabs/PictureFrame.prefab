@@ -126,26 +126,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b40ff31ecce19429680743ca37a3379e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptimizedCleanableSurface
-  gridWidth: 32
-  gridHeight: 32
+  gridWidth: 64
+  gridHeight: 64
   surfaceSize: {x: 0.135, y: 0.135}
-  cellGap: 0
   dirtyColor: {r: 0.35, g: 0.25, b: 0.15, a: 1}
   wetColor: {r: 0.18801177, g: 0.4024176, b: 0.6132076, a: 1}
-  cleanColor: {r: 0.95, g: 0.95, b: 0.9, a: 1}
   wetThreshold: 0.3
   cleanableThreshold: 0.5
-  cleanThreshold: 0.9
+  cleanThreshold: 1
   enableDryOut: 1
   dryOutTime: 8
   dryOutRate: 0.15
-  smoothColorTransitions: 1
+  smoothColorTransitions: 0
   colorTransitionSpeed: 5
   audioSource: {fileID: 0}
   cleanSound: {fileID: 0}
   completionSound: {fileID: 0}
   audioVolume: 0.5
-  showDebugGizmos: 0
 --- !u!1001 &6287530225247970348
 PrefabInstance:
   m_ObjectHideFlags: 0

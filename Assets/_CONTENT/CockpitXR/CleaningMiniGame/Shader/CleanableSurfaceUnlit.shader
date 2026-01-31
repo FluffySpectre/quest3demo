@@ -9,13 +9,17 @@ Shader "Custom/CleanableSurfaceUnlit"
     SubShader
     {
         Tags 
-        { 
-            "RenderType" = "Opaque" 
+        {
+            "RenderType" = "Transparent"
+            "Queue" = "Transparent-1" // Render before standard transparent objects (like particles)
             "RenderPipeline" = "UniversalPipeline"
         }
         
         Pass
         {
+            Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+            
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -64,7 +68,7 @@ Shader "Custom/CleanableSurfaceUnlit"
                 half4 finalColor = texColor * IN.color * _Brightness;
                 
                 finalColor.rgb = MixFog(finalColor.rgb, IN.fogFactor);
-                finalColor.a = 1.0;
+                finalColor.a = IN.color.a;
                 
                 return finalColor;
             }

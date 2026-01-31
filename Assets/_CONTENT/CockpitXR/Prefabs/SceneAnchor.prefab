@@ -621,7 +621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 2244284c-fbbf-4299-a240-7cce5a2134bc
+  instanceId: bf28fd4a-62a1-4c05-8932-468017e923a1
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -867,7 +867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: ae8dfafa-39fa-4bfc-9a09-834f6652c894
+  instanceId: 124ac07d-5875-4d6f-b063-46db1d9a794a
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -1013,8 +1013,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CleaningSponge
   cleanRadius: 0.1
-  cleanAmountPerSecond: 0.8
-  minVelocityToClean: 0.001
+  cleanAmountPerSecond: 4
+  minVelocityToClean: 0.005
   maxVelocityForBonus: 0.5
   contactPoint: {fileID: 6242742553524022983}
   contactCheckDistance: 0.1

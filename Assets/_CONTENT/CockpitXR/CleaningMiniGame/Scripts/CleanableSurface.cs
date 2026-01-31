@@ -32,7 +32,6 @@ public class CleanableSurface : MonoBehaviour
     [Header("State Colors")]
     [SerializeField] private Color dirtyColor = new Color(0.35f, 0.25f, 0.15f, 1f);
     [SerializeField] private Color wetColor = new Color(0.25f, 0.3f, 0.4f, 1f);
-    [SerializeField] private Color cleanColor = new Color(0.95f, 0.95f, 0.9f, 1f);
     
     [Header("Wet State Transition")]
     [SerializeField] private float wetThreshold = 0.3f;        // WetAmount needed to transition to Wet state
@@ -60,6 +59,7 @@ public class CleanableSurface : MonoBehaviour
     public event Action OnFullyCleaned;
     public event Action<Vector2Int, CellState> OnCellStateChanged;
     
+    private Color cleanColor = new Color(0f, 0f, 0f, 0f);
     private CleaningCell[,] cells;
     private Mesh mesh;
     private MeshFilter meshFilter;
