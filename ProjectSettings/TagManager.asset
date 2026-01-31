@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - QDSUIToggleSwitch
+  - QDSUIToggleButton
+  - QDSUITooltip
+  - QDSUISharedThemeColor
+  - QDSUIBorderlessButton
+  - QDSUIAccentColor
+  - QDSUIIcon
+  - QDSUISecondaryButton
+  - QDSUITextSecondaryColor
+  - QDSUIToggleBorderlessButton
   layers:
   - Default
   - TransparentFX
@@ -11,7 +21,7 @@ TagManager:
   - Overlay UI
   - Water
   - UI
-  - 
+  - Cleanable
   - 
   - 
   - 
