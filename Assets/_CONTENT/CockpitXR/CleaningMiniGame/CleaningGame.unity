@@ -540,9 +540,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4149914278389357765, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
+      propertyPath: instanceId
+      value: 9d2ed167-be41-44f2-b370-da629b1ab258
+      objectReference: {fileID: 0}
     - target: {fileID: 6111689191778541254, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 3.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6435655012688084409, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
+      propertyPath: '_handGrabPoses.Array.data[2]'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6867208762703652214, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
       propertyPath: isSpraying

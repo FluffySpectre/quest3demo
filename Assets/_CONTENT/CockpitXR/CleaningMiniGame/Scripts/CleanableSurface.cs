@@ -6,6 +6,7 @@ public enum CellState
 {
     Dirty,
     Wet,
+    PartlyCleaned,
     Clean
 }
 
@@ -29,6 +30,7 @@ public class CleanableSurface : MonoBehaviour
     [Header("State Colors")]
     [SerializeField] private Color dirtyColor = new Color(0.35f, 0.25f, 0.15f, 0f);
     [SerializeField] private Color wetColor = new Color(0.25f, 0.3f, 0.4f, 0f);
+    [SerializeField] private Color partlyCleanedColor = new Color(0.6f, 0.55f, 0.5f, 0.5f);  // New color
     [SerializeField] private Color cleanColor = new Color(1f, 1f, 1f, 1f);
     
     [Header("Wet State Transition")]
@@ -37,6 +39,7 @@ public class CleanableSurface : MonoBehaviour
     
     [Header("Clean State Transition")]
     [SerializeField] private float cleanThreshold = 1.0f;      // CleanAmount needed to transition to Clean state
+    [SerializeField] private float partlyCleanedThreshold = 0.1f;
     [SerializeField] [Range(0f, 0.5f)] private float cleanMissProbability = 0.2f;
     
     [Header("Dry Out Settings")]
@@ -89,7 +92,8 @@ public class CleanableSurface : MonoBehaviour
     public int TotalCells => totalCells;
     public int CleanedCells => cleanedCells;
     public int WetCells { get; private set; }
-    public int DirtyCells => totalCells - cleanedCells - WetCells;
+    public int PartlyCleanedCells { get; private set; }
+    public int DirtyCells => totalCells - cleanedCells - WetCells - PartlyCleanedCells;
     
     private void Awake()
     {
@@ -132,6 +136,7 @@ public class CleanableSurface : MonoBehaviour
         totalCells = gridWidth * gridHeight;
         cleanedCells = 0;
         WetCells = 0;
+        PartlyCleanedCells = 0;
         completionPercentage = 0f;
         
         InitializeGrid();
@@ -277,8 +282,8 @@ public class CleanableSurface : MonoBehaviour
         {
             var cell = cells[pos.x, pos.y];
             
-            // Can only wet dirty or already wet cells
-            if (cell.State == CellState.Dirty || cell.State == CellState.Wet)
+            // Can wet dirty, partly cleaned, or already wet cells
+            if (cell.State == CellState.Dirty || cell.State == CellState.Wet || cell.State == CellState.PartlyCleaned)
             {
                 // Calculate distance-based falloff
                 Vector3 cellWorldPos = GetCellWorldPosition(pos.x, pos.y);
@@ -298,6 +303,14 @@ public class CleanableSurface : MonoBehaviour
                 {
                     cell.State = CellState.Wet;
                     WetCells++;
+                    OnCellStateChanged?.Invoke(pos, CellState.Wet);
+                }
+                // State transition: PartlyCleaned -> Wet
+                else if (cell.State == CellState.PartlyCleaned && cell.WetAmount >= wetThreshold)
+                {
+                    cell.State = CellState.Wet;
+                    WetCells++;
+                    PartlyCleanedCells--;
                     OnCellStateChanged?.Invoke(pos, CellState.Wet);
                 }
                 
@@ -382,6 +395,26 @@ public class CleanableSurface : MonoBehaviour
         return cell.State == CellState.Wet && cell.WetAmount >= cleanableThreshold;
     }
     
+    public bool IsPositionPartlyCleaned(Vector3 worldPosition)
+    {
+        if (!isInitialized) return false;
+        
+        Vector2Int? gridPos = WorldToGridPosition(worldPosition);
+        if (!gridPos.HasValue) return false;
+        
+        return cells[gridPos.Value.x, gridPos.Value.y].State == CellState.PartlyCleaned;
+    }
+    
+    public float GetCleaningProgress(Vector3 worldPosition)
+    {
+        if (!isInitialized) return 0f;
+        
+        Vector2Int? gridPos = WorldToGridPosition(worldPosition);
+        if (!gridPos.HasValue) return 0f;
+        
+        return cells[gridPos.Value.x, gridPos.Value.y].CleanAmount;
+    }
+    
     public Vector2Int? WorldToGridPosition(Vector3 worldPosition)
     {
         Vector3 localPos = transform.InverseTransformPoint(worldPosition);
@@ -409,6 +442,14 @@ public class CleanableSurface : MonoBehaviour
     public Vector3 GetCellWorldPosition(int x, int y)
     {
         return transform.TransformPoint(GetCellLocalPosition(x, y));
+    }
+    
+    public CellState GetCellState(int x, int y)
+    {
+        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+            return CellState.Dirty;
+        
+        return cells[x, y].State;
     }
     
     private List<Vector2Int> GetCellsInRadius(Vector3 worldPosition, float radius)
@@ -469,6 +510,13 @@ public class CleanableSurface : MonoBehaviour
                 // Interpolate based on wetness and cleaning progress
                 Color wetBase = Color.Lerp(dirtyColor, wetColor, cell.WetAmount);
                 targetColor = Color.Lerp(wetBase, cleanColor, cell.CleanAmount * 0.3f);
+                break;
+                
+            case CellState.PartlyCleaned:
+                // Interpolate between dirty and partly cleaned based on cleaning progress
+                // Also show slight wetness if any remains
+                Color partlyBase = Color.Lerp(dirtyColor, partlyCleanedColor, cell.CleanAmount);
+                targetColor = Color.Lerp(partlyBase, wetColor, cell.WetAmount * 0.3f);
                 break;
                 
             case CellState.Clean:
@@ -545,20 +593,40 @@ public class CleanableSurface : MonoBehaviour
                         // Start drying out
                         cell.WetAmount -= dryOutRate * deltaTime;
                         
-                        // Transition back to dirty if fully dried
+                        // Transition when fully dried
                         if (cell.WetAmount <= 0f)
                         {
                             cell.WetAmount = 0f;
-                            cell.CleanAmount = 0f;
-                            cell.State = CellState.Dirty;
                             WetCells--;
                             
-                            OnCellStateChanged?.Invoke(new Vector2Int(x, y), CellState.Dirty);
+                            // If has cleaning progress, transition to PartlyCleaned
+                            // Otherwise, transition back to Dirty
+                            if (cell.CleanAmount >= partlyCleanedThreshold)
+                            {
+                                cell.State = CellState.PartlyCleaned;
+                                PartlyCleanedCells++;
+                                OnCellStateChanged?.Invoke(new Vector2Int(x, y), CellState.PartlyCleaned);
+                            }
+                            else
+                            {
+                                cell.CleanAmount = 0f;
+                                cell.State = CellState.Dirty;
+                                OnCellStateChanged?.Invoke(new Vector2Int(x, y), CellState.Dirty);
+                            }
                         }
                         
                         UpdateCellTargetColor(x, y);
                         anyChanged = true;
                     }
+                }
+                // PartlyCleaned cells can also have residual wetness that dries
+                else if (cell.State == CellState.PartlyCleaned && cell.WetAmount > 0f)
+                {
+                    cell.WetAmount -= dryOutRate * deltaTime;
+                    if (cell.WetAmount < 0f) cell.WetAmount = 0f;
+                    
+                    UpdateCellTargetColor(x, y);
+                    anyChanged = true;
                 }
             }
         }

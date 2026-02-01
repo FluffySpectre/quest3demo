@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1841222744385421580}
   serializedVersion: 2
   m_LocalRotation: {x: 0.15906441, y: 0.6889837, z: -0.15906441, w: 0.6889837}
-  m_LocalPosition: {x: -0.002, y: 0.003, z: -0}
+  m_LocalPosition: {x: -0.0035, y: 0.0019, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -128,14 +128,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OptimizedCleanableSurface
   gridWidth: 96
   gridHeight: 96
-  surfaceSize: {x: 0.135, y: 0.135}
+  surfaceSize: {x: 0.173, y: 0.173}
   dirtyColor: {r: 0.35, g: 0.25, b: 0.15, a: 0}
   wetColor: {r: 0.18801177, g: 0.4024176, b: 0.6132076, a: 0}
+  partlyCleanedColor: {r: 0.6, g: 0.55, b: 0.5, a: 0.5}
   cleanColor: {r: 1, g: 1, b: 1, a: 1}
   wetThreshold: 0.3
   cleanableThreshold: 0.5
   cleanThreshold: 1
-  cleanMissProbability: 0.2
+  partlyCleanedThreshold: 0.1
+  cleanMissProbability: 0.15
   enableDryOut: 1
   dryOutTime: 8
   dryOutRate: 0.15

@@ -1116,6 +1116,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4758630057018910189}
     m_Modifications:
+    - target: {fileID: 3661438942326669813, guid: 6fc3576e3eb014f20b81dd86b90e3836, type: 3}
+      propertyPath: instanceId
+      value: f95d769b-488f-4451-9542-b041b4e543b6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751087467290667544, guid: 6fc3576e3eb014f20b81dd86b90e3836, type: 3}
+      propertyPath: instanceId
+      value: 0ab469a5-a988-47a1-832c-87bbaa868f68
+      objectReference: {fileID: 0}
     - target: {fileID: 6561347753736441964, guid: 6fc3576e3eb014f20b81dd86b90e3836, type: 3}
       propertyPath: m_Name
       value: Sponge
@@ -1159,6 +1167,10 @@ PrefabInstance:
     - target: {fileID: 6766046131476657143, guid: 6fc3576e3eb014f20b81dd86b90e3836, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8347683603559829645, guid: 6fc3576e3eb014f20b81dd86b90e3836, type: 3}
+      propertyPath: instanceId
+      value: a472cda9-4a61-4beb-9c3e-d19ac2a73eb3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

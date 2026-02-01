@@ -6,7 +6,6 @@ public class CleaningSponge : MonoBehaviour
     [SerializeField] private float cleanRadius = 0.04f;
     [SerializeField] private float cleanAmountPerSecond = 0.8f;
     [SerializeField] private float minVelocityToClean = 0.05f;
-    [SerializeField] private float maxVelocityForBonus = 0.5f;
     
     [Header("Contact Detection")]
     [SerializeField] private Transform contactPoint;
@@ -15,13 +14,24 @@ public class CleaningSponge : MonoBehaviour
     
     [Header("Feedback")]
     [SerializeField] private AudioSource scrubAudioSource;
-    [SerializeField] private AudioClip scrubSound;
+    [SerializeField] private AudioClip[] scrubSounds;
     [SerializeField] [Range(0f, 1f)] private float scrubVolume = 0.6f;
+    [SerializeField] private float volumeFadeSpeed = 10f;
+    [SerializeField] private float minPitch = 1.2f;
+    [SerializeField] private float maxPitch = 1.8f;
+    
+    [Header("Smoothing")]
+    [SerializeField] private float velocitySmoothing = 0.1f;
+    [SerializeField] private float cleaningGracePeriod = 0.15f;
     
     private Vector3 lastPosition;
-    private Vector3 velocity;
+    private Vector3 smoothedVelocity;
     private float currentWetness;
     private float currentDirtiness;
+    
+    private float cleaningGraceTimer;
+    private float targetVolume;
+    private float targetPitch = 1f;
     
     public bool isGrabbed;
     private bool isInContact;
@@ -44,17 +54,19 @@ public class CleaningSponge : MonoBehaviour
     public void OnRelease()
     {
         isGrabbed = false;
-        StopCleaningFeedback();
+        targetVolume = 0f;
     }
 
     private void Update()
     {
-        // Calculate velocity
-        velocity = (transform.position - lastPosition) / Time.deltaTime;
+        // Calculate smoothed velocity
+        Vector3 rawVelocity = (transform.position - lastPosition) / Time.deltaTime;
+        smoothedVelocity = Vector3.Lerp(smoothedVelocity, rawVelocity, velocitySmoothing);
         lastPosition = transform.position;
         
         if (!isGrabbed)
         {
+            UpdateAudio();
             return;
         }
         
@@ -63,21 +75,25 @@ public class CleaningSponge : MonoBehaviour
         
         if (isInContact && currentSurface != null)
         {
-            float speed = velocity.magnitude;
+            float speed = smoothedVelocity.magnitude;
             
             if (speed >= minVelocityToClean)
             {
                 PerformCleaning(speed);
             }
-            else
-            {
-                StopCleaningFeedback();
-            }
+        }
+        
+        // Handle grace timer
+        if (cleaningGraceTimer > 0)
+        {
+            cleaningGraceTimer -= Time.deltaTime;
         }
         else
         {
-            StopCleaningFeedback();
+            targetVolume = 0f;
         }
+        
+        UpdateAudio();
     }
 
     private void CheckSurfaceContact()
@@ -102,7 +118,7 @@ public class CleaningSponge : MonoBehaviour
     private void PerformCleaning(float speed)
     {
         // Calculate cleaning amount
-        float velocityMultiplier = Mathf.Clamp01(speed / maxVelocityForBonus);
+        float velocityMultiplier = Mathf.Clamp01(speed);
         float cleanAmount = cleanAmountPerSecond * Time.deltaTime;
         
         // Check if position is wet before attempting to clean
@@ -115,43 +131,55 @@ public class CleaningSponge : MonoBehaviour
                 // Absorb wetness and dirt
                 currentWetness = Mathf.Clamp01(currentWetness + 0.05f * Time.deltaTime);
                 currentDirtiness = Mathf.Clamp01(currentDirtiness + 0.03f * Time.deltaTime);
-                
-                PlayCleaningFeedback(velocityMultiplier);
-            }
-            else
-            {
-                StopCleaningFeedback();
             }
         }
-        else
-        {
-            // Surface not wet at this position
-            StopCleaningFeedback();
-        }
+
+        // Reset grace timer and set target volume/pitch
+        cleaningGraceTimer = cleaningGracePeriod;
+        targetVolume = scrubVolume * Mathf.Lerp(0.5f, 1f, velocityMultiplier);
+        targetPitch = Mathf.Lerp(minPitch, maxPitch, velocityMultiplier);
     }
 
-    private void PlayCleaningFeedback(float intensity)
+    private void UpdateAudio()
     {
-        // Audio
-        if (scrubAudioSource != null && !scrubAudioSource.isPlaying && scrubSound != null)
+        if (scrubAudioSource == null || scrubSounds == null || scrubSounds.Length == 0) 
+            return;
+        
+        // Smoothly adjust volume toward target
+        scrubAudioSource.volume = Mathf.Lerp(
+            scrubAudioSource.volume, 
+            targetVolume, 
+            Time.deltaTime * volumeFadeSpeed
+        );
+        
+        // Smoothly adjust pitch toward target
+        scrubAudioSource.pitch = Mathf.Lerp(
+            scrubAudioSource.pitch,
+            targetPitch,
+            Time.deltaTime * volumeFadeSpeed
+        );
+        
+        if (targetVolume > 0.01f && !scrubAudioSource.isPlaying)
         {
-            scrubAudioSource.clip = scrubSound;
-            scrubAudioSource.loop = true;
-            scrubAudioSource.volume = scrubVolume * intensity;
+            scrubAudioSource.clip = GetRandomScrubSound();
+            scrubAudioSource.loop = false;
+            scrubAudioSource.volume = 0f;
+            scrubAudioSource.pitch = minPitch;
             scrubAudioSource.Play();
         }
-        else if (scrubAudioSource != null && scrubAudioSource.isPlaying)
-        {
-            scrubAudioSource.volume = Mathf.Lerp(scrubAudioSource.volume, scrubVolume * intensity, Time.deltaTime * 5f);
-        }
-    }
-
-    private void StopCleaningFeedback()
-    {
-        if (scrubAudioSource != null && scrubAudioSource.isPlaying)
+        else if (scrubAudioSource.volume < 0.01f && scrubAudioSource.isPlaying)
         {
             scrubAudioSource.Stop();
         }
+    }
+
+    private AudioClip GetRandomScrubSound()
+    {
+        if (scrubSounds == null || scrubSounds.Length == 0)
+            return null;
+        
+        int index = Random.Range(0, scrubSounds.Length);
+        return scrubSounds[index];
     }
 
     private void OnDrawGizmosSelected()
