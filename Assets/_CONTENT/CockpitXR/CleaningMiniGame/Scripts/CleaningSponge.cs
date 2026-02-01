@@ -26,8 +26,6 @@ public class CleaningSponge : MonoBehaviour
     
     private Vector3 lastPosition;
     private Vector3 smoothedVelocity;
-    private float currentWetness;
-    private float currentDirtiness;
     
     private float cleaningGraceTimer;
     private float targetVolume;
@@ -126,12 +124,9 @@ public class CleaningSponge : MonoBehaviour
         {
             bool didClean = currentSurface.ApplySponge(contactPoint.position, cleanRadius, cleanAmount);
             
-            if (didClean)
-            {
-                // Absorb wetness and dirt
-                currentWetness = Mathf.Clamp01(currentWetness + 0.05f * Time.deltaTime);
-                currentDirtiness = Mathf.Clamp01(currentDirtiness + 0.03f * Time.deltaTime);
-            }
+            // if (didClean)
+            // {
+            // }
         }
 
         // Reset grace timer and set target volume/pitch

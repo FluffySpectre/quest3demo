@@ -126,8 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b40ff31ecce19429680743ca37a3379e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptimizedCleanableSurface
-  gridWidth: 96
-  gridHeight: 96
+  gridWidth: 84
+  gridHeight: 84
   surfaceSize: {x: 0.173, y: 0.173}
   dirtyColor: {r: 0.35, g: 0.25, b: 0.15, a: 0}
   wetColor: {r: 0.18801177, g: 0.4024176, b: 0.6132076, a: 0}

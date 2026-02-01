@@ -818,7 +818,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CleaningSponge
   cleanRadius: 0.075
-  cleanAmountPerSecond: 2
+  cleanAmountPerSecond: 3
   minVelocityToClean: 0.05
   contactPoint: {fileID: 6766046131476657143}
   contactCheckDistance: 0.1
