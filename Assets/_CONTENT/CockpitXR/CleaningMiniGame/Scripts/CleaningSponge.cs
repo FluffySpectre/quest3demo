@@ -18,18 +18,11 @@ public class CleaningSponge : MonoBehaviour
     [SerializeField] private AudioClip scrubSound;
     [SerializeField] [Range(0f, 1f)] private float scrubVolume = 0.6f;
     
-    [Header("Visual Feedback")]
-    [SerializeField] private Renderer spongeRenderer;
-    [SerializeField] private Color dryColor = new Color(1f, 0.95f, 0.4f);
-    [SerializeField] private Color wetColor = new Color(0.7f, 0.65f, 0.3f);
-    [SerializeField] private Color dirtyColor = new Color(0.5f, 0.45f, 0.25f);
-    
     private Vector3 lastPosition;
     private Vector3 velocity;
     private float currentWetness;
     private float currentDirtiness;
     
-    private MaterialPropertyBlock propertyBlock;
     public bool isGrabbed;
     private bool isInContact;
     
@@ -37,8 +30,6 @@ public class CleaningSponge : MonoBehaviour
 
     private void Awake()
     {
-        propertyBlock = new MaterialPropertyBlock();
-        
         if (contactPoint == null)
             contactPoint = transform;
             
@@ -87,8 +78,6 @@ public class CleaningSponge : MonoBehaviour
         {
             StopCleaningFeedback();
         }
-        
-        UpdateSpongeVisual();
     }
 
     private void CheckSurfaceContact()
@@ -163,19 +152,6 @@ public class CleaningSponge : MonoBehaviour
         {
             scrubAudioSource.Stop();
         }
-    }
-
-    private void UpdateSpongeVisual()
-    {
-        if (spongeRenderer == null) return;
-        
-        // Blend between dry, wet, and dirty colors
-        Color baseColor = Color.Lerp(dryColor, wetColor, currentWetness);
-        Color finalColor = Color.Lerp(baseColor, dirtyColor, currentDirtiness);
-        
-        spongeRenderer.GetPropertyBlock(propertyBlock);
-        propertyBlock.SetColor("_BaseColor", finalColor);
-        spongeRenderer.SetPropertyBlock(propertyBlock);
     }
 
     private void OnDrawGizmosSelected()

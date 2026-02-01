@@ -134,13 +134,8 @@ public class CleanableSurface : MonoBehaviour
         WetCells = 0;
         completionPercentage = 0f;
         
-        // Initialize grid data
         InitializeGrid();
-        
-        // Generate mesh
         GenerateMesh();
-        
-        // Setup collider
         SetupCollider();
         
         isInitialized = true;
