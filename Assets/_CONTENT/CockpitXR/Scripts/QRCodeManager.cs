@@ -1,11 +1,11 @@
 using UnityEngine;
 using Meta.XR.MRUtilityKit;
-using Meta.XR.Samples;
 
 public class QRCodeManager : MonoBehaviour
 {
     [SerializeField] private SceneAnchor sceneAnchor;
     [SerializeField] private MRUK mrukInstance;
+    [SerializeField] private string[] markerIDs;
 
     public static QRCodeManager Instance { get; private set; }
 
@@ -50,11 +50,11 @@ public class QRCodeManager : MonoBehaviour
             return;
         }
         
-        //var payload = trackable.MarkerPayloadString;
-        //if (payload == "Device1")
-        //{
-        //    var instance1 = Instantiate(qrCodePrefab, trackable.transform);
-        //}
+        var payload = trackable.MarkerPayloadString;
+        if (!IsMarkerIDValid(payload))
+        {
+            return;
+        }
 
         sceneAnchor.gameObject.SetActive(true);
         sceneAnchor.Initialize(trackable);
@@ -79,5 +79,17 @@ public class QRCodeManager : MonoBehaviour
     void DisableQRCodeTracking()
     {
         mrukInstance.enabled = false;
+    }
+
+    bool IsMarkerIDValid(string payload)
+    {
+        foreach (var id in markerIDs)
+        {
+            if (payload == id)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

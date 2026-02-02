@@ -2200,6 +2200,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QRCodeTracker
   sceneAnchor: {fileID: 5855165}
   mrukInstance: {fileID: 896818603}
+  markerIDs:
+  - 1
+  - 2
+  - 3
 --- !u!4 &1875899525
 Transform:
   m_ObjectHideFlags: 0
