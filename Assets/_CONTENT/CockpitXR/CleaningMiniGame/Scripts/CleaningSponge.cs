@@ -19,6 +19,7 @@ public class CleaningSponge : MonoBehaviour
     [SerializeField] private float volumeFadeSpeed = 10f;
     [SerializeField] private float minPitch = 1.2f;
     [SerializeField] private float maxPitch = 1.8f;
+    [SerializeField] private ParticleSystem cleaningParticles;
     
     [Header("Smoothing")]
     [SerializeField] private float velocitySmoothing = 0.1f;
@@ -33,6 +34,7 @@ public class CleaningSponge : MonoBehaviour
     
     public bool isGrabbed;
     private bool isInContact;
+    private Vector3 closestContactPoint;
     
     private CleanableSurface currentSurface;
 
@@ -65,6 +67,7 @@ public class CleaningSponge : MonoBehaviour
         if (!isGrabbed)
         {
             UpdateAudio();
+            UpdateParticles();
             return;
         }
         
@@ -89,9 +92,14 @@ public class CleaningSponge : MonoBehaviour
         else
         {
             targetVolume = 0f;
+            if (cleaningParticles != null && cleaningParticles.isPlaying)
+            {
+                cleaningParticles.Stop();
+            }
         }
         
         UpdateAudio();
+        UpdateParticles();
     }
 
     private void CheckSurfaceContact()
@@ -104,6 +112,8 @@ public class CleaningSponge : MonoBehaviour
             if (surface != null)
             {
                 currentSurface = surface;
+                closestContactPoint = col.ClosestPoint(contactPoint.position);
+
                 isInContact = true;
                 return;
             }
@@ -124,9 +134,14 @@ public class CleaningSponge : MonoBehaviour
         {
             bool didClean = currentSurface.ApplySponge(contactPoint.position, cleanRadius, cleanAmount);
             
-            // if (didClean)
-            // {
-            // }
+            if (didClean)
+            {
+                cleaningParticles.transform.position = closestContactPoint;
+                if (!cleaningParticles.isPlaying)
+                {
+                    cleaningParticles.Play();
+                }
+            }
         }
 
         // Reset grace timer and set target volume/pitch
@@ -175,6 +190,18 @@ public class CleaningSponge : MonoBehaviour
         
         int index = Random.Range(0, scrubSounds.Length);
         return scrubSounds[index];
+    }
+
+    private void UpdateParticles()
+    {
+        if (cleaningParticles == null)
+            return;
+
+        if (!isInContact || smoothedVelocity.magnitude < minVelocityToClean)
+        {
+            if (cleaningParticles.isPlaying)
+                cleaningParticles.Stop();
+        }
     }
 
     private void OnDrawGizmosSelected()
