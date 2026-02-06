@@ -32,7 +32,6 @@ public class CleaningSponge : MonoBehaviour
     private float targetVolume;
     private float targetPitch = 1f;
     
-    public bool isGrabbed;
     private bool isInContact;
     private Vector3 closestContactPoint;
     
@@ -46,30 +45,12 @@ public class CleaningSponge : MonoBehaviour
         lastPosition = transform.position;
     }
 
-    public void OnGrab()
-    {
-        isGrabbed = true;
-    }
-
-    public void OnRelease()
-    {
-        isGrabbed = false;
-        targetVolume = 0f;
-    }
-
     private void Update()
     {
         // Calculate smoothed velocity
         Vector3 rawVelocity = (transform.position - lastPosition) / Time.deltaTime;
         smoothedVelocity = Vector3.Lerp(smoothedVelocity, rawVelocity, velocitySmoothing);
         lastPosition = transform.position;
-        
-        if (!isGrabbed)
-        {
-            UpdateAudio();
-            UpdateParticles();
-            return;
-        }
         
         // Check for surface contact
         CheckSurfaceContact();
