@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum CellState
 {
@@ -41,6 +42,7 @@ public class CleanableSurface : MonoBehaviour
     [SerializeField] private float cleanThreshold = 1.0f;      // CleanAmount needed to transition to Clean state
     [SerializeField] private float partlyCleanedThreshold = 0.1f;
     [SerializeField] [Range(0f, 0.5f)] private float cleanMissProbability = 0.2f;
+    [SerializeField] private float cleanCompletionThreshold = 0.9f; // Percentage of cells that must be clean to trigger completion
     
     [Header("Dry Out Settings")]
     [SerializeField] private bool enableDryOut = true;
@@ -58,7 +60,7 @@ public class CleanableSurface : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float audioVolume = 0.5f;
 
     public event Action<float> OnProgressChanged;
-    public event Action OnFullyCleaned;
+    public UnityEvent OnFullyCleaned;
     public event Action<Vector2Int, CellState> OnCellStateChanged;
     
     private CleaningCell[,] cells;
@@ -646,9 +648,10 @@ public class CleanableSurface : MonoBehaviour
             completionPercentage = newPercentage;
             OnProgressChanged?.Invoke(completionPercentage);
             
-            if (cleanedCells >= totalCells)
+            if (completionPercentage >= cleanCompletionThreshold)
             {
                 PlaySound(completionSound);
+                CleanAllCells();
                 OnFullyCleaned?.Invoke();
             }
         }
@@ -660,5 +663,30 @@ public class CleanableSurface : MonoBehaviour
         {
             audioSource.PlayOneShot(clip, audioVolume);
         }
+    }
+
+    private void CleanAllCells()
+    {
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for (int y = 0; y < gridHeight; y++)
+            {
+                var cell = cells[x, y];
+                if (cell.State != CellState.Clean)
+                {
+                    cell.State = CellState.Clean;
+                    cell.WetAmount = 0f;
+                    cell.CleanAmount = 1f;
+                    cleanedCells++;
+                    WetCells = 0;
+                    PartlyCleanedCells = 0;
+                    
+                    UpdateCellTargetColor(x, y);
+                    OnCellStateChanged?.Invoke(new Vector2Int(x, y), CellState.Clean);
+                }
+            }
+        }
+        
+        meshNeedsUpdate = true;
     }
 }

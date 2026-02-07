@@ -4,7 +4,7 @@ Shader "Custom/CleanableSurfaceUnlit"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _RevealTex ("Reveal Texture", 2D) = "white" {}
-        _Brightness ("Brightness", Range(0.5, 2)) = 1.0
+        _Brightness ("Brightness", Range(0.5, 4)) = 1.0
     }
     
     SubShader
