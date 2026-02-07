@@ -321,6 +321,37 @@ MonoBehaviour:
   _ghostProvider: {fileID: 0}
   _handGhostProvider: {fileID: 11400000, guid: 9b9df4f150839de48af887d742aabf53, type: 2}
   _ovrOffsetMode: 0
+--- !u!1 &2692054421653688535
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 909491213435534987}
+  m_Layer: 0
+  m_Name: ContactPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &909491213435534987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2692054421653688535}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.191, z: 0.269}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6766046131476657143}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3910484334014347959
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,6 +691,7 @@ Transform:
   - {fileID: 8669113568427182545}
   - {fileID: 6415094074925954347}
   - {fileID: 2645584420019574066}
+  - {fileID: 909491213435534987}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8347683603559829645
@@ -820,11 +852,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5698a58e1886a43679b632424fefa141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CleaningSponge
-  cleanRadius: 0.075
-  cleanAmountPerSecond: 3
+  cleanRadius: 0.04
+  cleanAmountPerSecond: 4
   minVelocityToClean: 0.05
-  contactPoint: {fileID: 6766046131476657143}
-  contactCheckDistance: 0.1
+  contactPoint: {fileID: 909491213435534987}
+  contactCheckDistance: 0.02
   surfaceLayer:
     serializedVersion: 2
     m_Bits: 64
