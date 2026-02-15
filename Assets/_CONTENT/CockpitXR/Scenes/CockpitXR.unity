@@ -303,6 +303,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8713843116006002182, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
+      propertyPath: positionOffset.z
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -404,17 +408,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
---- !u!114 &5855165 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8713843116006002182, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
-  m_PrefabInstance: {fileID: 5855164}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 144d78cf53e2d4ec385d1c8dabd1d1e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneAnchor
 --- !u!1 &5855166 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7213427723016360411, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
@@ -1606,8 +1599,54 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+  m_Father: {fileID: 947774440}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &947774439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 947774440}
+  - component: {fileID: 947774441}
+  m_Layer: 0
+  m_Name: MRUKMarkerTracker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &947774440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947774439}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 896818604}
   m_Father: {fileID: 1875899525}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &947774441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947774439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e85eba6e5a94468f8739bd02a5f97e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MRUKMarkerTracker
+  mrukInstance: {fileID: 896818603}
 --- !u!1 &1000319145
 GameObject:
   m_ObjectHideFlags: 0
@@ -1952,6 +1991,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2606bf2f0c914a7aba4390f29ba2eb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1499794573 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8387054676497846994, guid: de763c23ed4c54804849a2f81c7405a3, type: 3}
+  m_PrefabInstance: {fileID: 5855164}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1564988973
 GameObject:
   m_ObjectHideFlags: 0
@@ -2180,7 +2224,7 @@ GameObject:
   - component: {fileID: 1875899525}
   - component: {fileID: 1875899524}
   m_Layer: 0
-  m_Name: QRCodeManager
+  m_Name: SpatialAlignmentSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2195,15 +2239,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1875899523}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b36b1b069f804bb284bd79c84220222, type: 3}
+  m_Script: {fileID: 11500000, guid: db892f1061a7f43a7ba9270fa8979e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QRCodeTracker
-  sceneAnchor: {fileID: 5855165}
-  mrukInstance: {fileID: 896818603}
-  markerIDs:
+  tracker: {fileID: 947774441}
+  sceneAnchor: {fileID: 1499794573}
+  validMarkerIDs:
   - 1
   - 2
   - 3
+  stopAfterFirstDetection: 1
+  stopDelay: 1.5
 --- !u!4 &1875899525
 Transform:
   m_ObjectHideFlags: 0
@@ -2217,7 +2263,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 896818604}
+  - {fileID: 947774440}
+  - {fileID: 2078183482}
   m_Father: {fileID: 1762892646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1899972625
@@ -2442,6 +2489,74 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &2078183481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2078183482}
+  - component: {fileID: 2078183483}
+  - component: {fileID: 2078183484}
+  m_Layer: 0
+  m_Name: AprilTagMarkerTracker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2078183482
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078183481}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875899525}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2078183483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078183481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbff6775e812d46fe8c67825c0733cbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AprilTagMarkerDetector
+  cameraAccess: {fileID: 2078183484}
+  tagSizeMeters: 0.05
+  decimation: 2
+  detectionInterval: 0.1
+  framesToLose: 5
+  poseRotationCorrection: {x: 180, y: 0, z: 0}
+--- !u!114 &2078183484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078183481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef9a7893e57c04c0db4114c70954b915, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: meta.xr.mrutilitykit::Meta.XR.PassthroughCameraAccess
+  CameraPosition: 0
+  RequestedResolution: {x: 1280, y: 1280}
+  _maxFramerate: 15
+  TargetMaterial: {fileID: 0}
+  _texturePropertyName: 
 --- !u!1 &2136332256
 GameObject:
   m_ObjectHideFlags: 0
